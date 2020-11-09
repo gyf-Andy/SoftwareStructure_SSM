@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/tx
+        	http://www.springframework.org/schema/tx/spring-tx.xsd
+    		 http://www.springframework.org/schema/aop 
+     		http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 1.开启注解 -->
+	<!-- 1.1bean的 -->
+	<context:component-scan base-package="com.gyf"></context:component-scan>
+	<!-- 1.2DI的 -->
+	<context:annotation-config></context:annotation-config>
+	<!-- 1.3Aop的注解 -->
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+	<!-- 2.dataSource -->
+	<!-- 2.1把jdbc.properties引入到applicationContext.xml文件里 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>classpath:jdbc.properties</value>
+		</property>
+	</bean>
+
+	<!-- 2.2配置dataSourcde -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+
+	<!-- 3.与mybatis整合  sqlSessionFactoryBean(dataSource,mapperLoactions) -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 3.1注入dataSource -->
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+		<!-- mapper.xml的位置 -->
+		<property name="mapperLocations">
+			<value>classpath:com/gyf/mapper/*.xml</value>
+		</property>
+	</bean>
+
+	<!-- 4. 实例化事务管理器-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 4.1注入dataSource -->
+		<property name="dataSource">
+			<ref bean="dataSource"/>
+		</property>
+	</bean>
+
+	<!-- 5.事务管理的策略 -->
+	<tx:advice id="tx" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<!--6.AOP配置  -->
+	<aop:config>
+		<!-- 切入点表达式 -->
+		<aop:pointcut expression="execution(* com.gyf.service..*.*(..))" id="p1"/>
+		<!-- 满足什么条件使用什么样的事务策略 -->
+		<aop:advisor advice-ref="tx" pointcut-ref="p1"/>
+	</aop:config>
+
+	<!-- 7. mapperScan   扫描所有的mapper.java,h会给这些接口生成代理对象-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.gyf.mapper"></property>
+	</bean>
+
+
+</beans>

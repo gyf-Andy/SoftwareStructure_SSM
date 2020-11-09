@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gyf.mapper.AdminMapper">
+
+	<!-- 不用resultMap反射来访问数据库 -->
+
+	<!--<select id="findAdminByAccountAndPwd" resultType="com.gyf.pojo.Admin" parameterType="String">
+		select * from admin where account=#{account} and password=#{password}
+	</select>
+	-->
+
+
+	<!--resultMap是Mybatis最强大的元素，它可以将查询到的复杂数据（比如查询到几个表中数据）映射到一个结果集当中。
+		使用这种方法时要用sql语句从多个表中获取数据
+	-->
+	<!-- 使用resultMap反射来访问数据库 -->
+	<!--<resultMap>标签里面放的是数据库表中的字段和namespace属性的映射-->
+	<!--id是接口名 type是类实体的路径-->
+	<resultMap id="adminResultMap" type="com.gyf.pojo.Admin">
+		<!--<id>标签放的是主键  <result>标签放的是属性 property是实体类中的属性名 column是表中的列名 -->
+		<id column="account" property="account"/>
+		<result column="password" property="password"/>
+		<result column="name" property="name"/>
+	</resultMap>
+	<!-- 接收到的数据类型还是com.gyf.pojo.Admin类型 执行sql语句所查询到的值装到了property内 -->
+
+	<select id="findAdminByAccountAndPwd" resultMap="adminResultMap" >
+		select * from admin where account=#{account} and password=#{password}
+	</select>
+
+	<select id="searchAdminInfo" resultMap="adminResultMap">
+		select * from admin
+	</select>
+
+	<select id="isHadTheUser" parameterType="String" resultType="int">
+		select count(account) from admin where name=#{name}
+	</select>
+	<!--查询classify表中的所有分类-->
+	<select id="searchAllClassify" resultType="com.gyf.pojo.Classify">
+		select * from classify
+	</select>
+
+	<select id="searchFoodNameById" resultType="com.gyf.pojo.FoodName">
+		select * from foodname where classifyId=#{classifyId}
+	</select>
+
+	<select id="getCommodityData" resultType="com.gyf.pojo.Commodity">
+		select * from commodity
+	</select>
+
+</mapper>

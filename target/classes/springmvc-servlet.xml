@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+						http://www.springframework.org/schema/mvc 
+						http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+						http://www.springframework.org/schema/tx
+    					http://www.springframework.org/schema/tx/spring-tx.xsd ">
+		<!-- 扫描该包下的所有的类，看类上面是否有@Controller,如果有会自动生成bean -->
+		<context:component-scan base-package="com.gyf.controller"></context:component-scan>
+		
+		<!-- 内部资源视图解析器 -->	
+		<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+			<!-- 前缀 -->
+				<property name="prefix" value="/WEB-INF/pages/"></property>
+
+			<!-- 后缀 -->
+				<property name="suffix" value=".jsp"></property>
+		</bean>			
+	
+		<!-- 静态资源映射 -->
+			<!-- 
+				/img/*   img文件夹下的所有资源
+				/img/**  img文件夹以及其子文件夹下的所有资源
+				
+				当url是 img/xxx 的时候，会自动匹配到/WEB-INF/image/xxx下
+			 -->
+
+		<mvc:resources  location="/WEB-INF/image/"  mapping="/image/**"/>
+		<mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
+		<mvc:resources location="/WEB-INF/css/" mapping="/css/**"/>
+		
+		<!-- 配置静态资源映射的时候必须有这个   注解驱动-->
+		<mvc:annotation-driven></mvc:annotation-driven>
+		
+		
+		<!-- 文件上传 
+			id 不能随便起  必须是multipartResolver
+		-->
+		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+			<!-- 可以指定一些属性  文件大小  文件类型 ，， -->
+			<property name="maxUploadSize" value="999999999"></property>
+		</bean>
+
+
+	<!-- 能支持springmvc更高级的一些功能，JSR303，快捷的ajax -->
+	<mvc:annotation-driven/>
+
+
+
+</beans>

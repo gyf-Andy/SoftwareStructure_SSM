@@ -1,0 +1,72 @@
+*{/* 清除浏览器默认边距 */
+    padding: 0;
+    margin: 0;
+}
+body{
+
+    background-position: center;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    color: white;
+    background-color:#7B7B7B;
+}
+#tit{
+    width: 375px;
+    height: 50px;
+    margin: 80px auto;
+    text-align: center;
+    font-size: 22px;
+}
+#log{
+    width: 375px;
+    height: 300px;
+    margin: -50px auto;
+    background-color: rgba(0,0,0,0.5);
+    padding: 12px;
+    border-radius: 10px;
+}
+#log .p{
+    font-size: 19px;
+    padding-bottom: 4px;
+    margin-bottom: 20px;
+    margin-top: 18px;
+    text-align: center;
+}
+#log .log_in{
+    width: 350px;
+    height: 40px;
+    font-size: 14px;
+    color: #858585;
+    border: 1px solid #d5d5d5;
+    margin-bottom: 20px;
+    padding-left: 25px;
+}
+#log .log_cs{
+    font-size: 14px;
+    height: 50px;
+    line-height: 35px;
+}
+#log .log_cs .log_sub{
+    width: 80px;
+    height: 40px;
+    background-color: #1E90FF;
+    color: white;
+    font-size: 15px;
+    border: 1px solid #428bca;
+    border-radius: 25px;
+    float: right;
+    cursor: pointer;/* 鼠标样式 */
+}
+#log .log_a{
+    text-align: center;
+    margin-top: 20px;
+}
+#log a{
+    font-size: 14px;
+    color: white;
+    margin: auto;
+    text-decoration: none;/* 去掉a标签的下划线 */
+}
+#log a:HOVER {
+    color: red;
+}
